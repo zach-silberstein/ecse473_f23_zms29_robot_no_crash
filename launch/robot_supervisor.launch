@@ -1,0 +1,5 @@
+<launch>
+    <!-- Create an argument for name space. -->
+    <arg name = "robot_ns" default = "robot0" />
+    <node name = "robot_no_crash_node" type = "robot_no_crash_node" pkg = "robot_no_crash" />
+</launch>
