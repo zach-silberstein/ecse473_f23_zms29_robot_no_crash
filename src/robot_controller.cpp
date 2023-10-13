@@ -47,6 +47,13 @@ int main(int argc, char **argv)
    * NodeHandle destructed will close down the node.
    */
   ros::NodeHandle n;
+  // Create a float variable to hold the parameter
+  // This time initialize it to a default value
+  double wall_dist = 1.0;
+  // Announce the value of wall_dist before the first call to the Parameter Server
+  ROS_INFO_ONCE("wall_dist began with: [%2.2f]", wall_dist);
+  
+
 
   /**
    * The advertise() function is how you tell ROS that you want to
@@ -95,6 +102,12 @@ int main(int argc, char **argv)
      * in the constructor above.
      */
     cmd_vel_pub.publish(msg);
+
+    // Get the parameter using the node handle that can be updated
+    // Removed & sign!!!!!
+    if (n.getParamCached("wall_dist", wall_dist)) {
+      ROS_INFO("wall_dist was updated to: [%2.2f]", wall_dist);
+    }
 
     ros::spinOnce();
 
