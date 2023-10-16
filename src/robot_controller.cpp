@@ -2,25 +2,38 @@
 #include "std_msgs/String.h"
 #include "geometry_msgs/Twist.h"
 #include "sensor_msgs/LaserScan.h"
+#include "std_msgs/Float64.h"
 
 #include <sstream>
 
 
 
 ros::Publisher *p_pub;
-
+bool stop_moving = false;
 
 /**
  * This tutorial demonstrates simple receipt of messages over the ROS system.
  */
 void twistCallback(const geometry_msgs::Twist::ConstPtr& msg)
 {
+  geometry_msgs::Twist pt;
+  pt.linear = msg->linear;
+  pt.angular = msg->angular;
+  if(stop_moving){
+    pt.linear.x = 0;
+  }
   p_pub->publish(msg);
 }
 
 void laserCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
 {
- 
+  for(int i = 45; i <=235; i++){
+    if(0.5 > msg->ranges[i]){
+      stop_moving = true;
+      ROS_WARN("OBSTICAL!!!!");
+      break;
+    }
+  }
 }
 
 
@@ -52,6 +65,11 @@ int main(int argc, char **argv)
   double wall_dist = 1.0;
   // Announce the value of wall_dist before the first call to the Parameter Server
   ROS_INFO_ONCE("wall_dist began with: [%2.2f]", wall_dist);
+  // Get the parameter using the node handle that can be updated
+  // Removed & sign!!!!!
+  if (n.getParamCached("wall_dist", wall_dist)) {
+    ROS_INFO("wall_dist was updated to: [%2.2f]", wall_dist);
+  }
   
 
 
@@ -77,7 +95,7 @@ int main(int argc, char **argv)
 
 
   ros::Subscriber twist_sub = n.subscribe("des_vel", 1000, twistCallback);
-  ros::Subscriber laser_sub = n.subscribe("lidar_1", 1000, laserCallback);
+  ros::Subscriber laser_sub = n.subscribe("laser_0", 1000, laserCallback);
 
   ros::Rate loop_rate(10);
 
@@ -103,11 +121,7 @@ int main(int argc, char **argv)
      */
     cmd_vel_pub.publish(msg);
 
-    // Get the parameter using the node handle that can be updated
-    // Removed & sign!!!!!
-    if (n.getParamCached("wall_dist", wall_dist)) {
-      ROS_INFO("wall_dist was updated to: [%2.2f]", wall_dist);
-    }
+    
 
     ros::spinOnce();
 
