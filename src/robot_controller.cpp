@@ -30,7 +30,7 @@ void laserCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
   for(int i = 45; i <=235; i++){
     if(0.5 > msg->ranges[i]){
       stop_moving = true;
-      ROS_WARN("OBSTICAL!!!!");
+      ROS_WARN("Obstacle encountered, try turning");
       break;
     }
   }
