@@ -9,4 +9,8 @@
     <!-- View the structure of the sensor_msgs/LaserScan message type -->
     <param name="wall_dist" value="0.5" type="double" />
 
+    <!-- Launch rqt_gui. -->
+    <arg name = "rqt_gui" default = "true" />
+    <node if = "$(arg rqt_gui)" name = "rqt_gui" pkg = "rqt_gui" type = "rqt_gui"/>
+
 </launch>
