@@ -23,7 +23,7 @@ void twistCallback(const geometry_msgs::Twist::ConstPtr& msg)
   pt.linear = msg->linear;
   pt.angular = msg->angular;
   // If need to stop moving
-  if(stop_moving){
+  if(stop_moving && pt.linear.x > 0){
     pt.linear.x = 0;
   }
   // Pulish pt
