@@ -10,6 +10,9 @@
 
 ros::Publisher *p_pub;
 bool stop_moving = false;
+// Create a float variable to hold the parameter
+// This time initialize it to a default value
+double wall_dist = 1.0;
 
 /**
  * This tutorial demonstrates simple receipt of messages over the ROS system.
@@ -32,7 +35,7 @@ void laserCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
   // 45 to 225 b/c that is the 180 degrees infront of robot
   for(int i = 45; i <=225; i++){
     // If within wall dist stop
-    if(0.5 > msg->ranges[i]){
+    if(wall_dist > msg->ranges[i]){
       stop_moving = true;
       ROS_WARN("Obstacle encountered, try turning");
       break;
@@ -68,9 +71,6 @@ int main(int argc, char **argv)
    * NodeHandle destructed will close down the node.
    */
   ros::NodeHandle n;
-  // Create a float variable to hold the parameter
-  // This time initialize it to a default value
-  double wall_dist = 1.0;
   // Announce the value of wall_dist before the first call to the Parameter Server
   ROS_INFO_ONCE("wall_dist began with: [%2.2f]", wall_dist);
   // Get the parameter using the node handle that can be updated
@@ -107,19 +107,12 @@ int main(int argc, char **argv)
 
   ros::Rate loop_rate(10);
 
-  /**
-   * A count of how many messages we have sent. This is used to create
-   * a unique string for each message.
-   */
-  int count = 0;
   while (ros::ok())
   {
     /**
      * This is a message object. You stuff it with data, and then publish it.
      */
     geometry_msgs::Twist msg;
-
-    
 
     /**
      * The publish() function is how you send messages. The parameter
@@ -128,7 +121,7 @@ int main(int argc, char **argv)
      * in the constructor above.
      */
     cmd_vel_pub.publish(msg);
-
+    ROS_INFO_ONCE("wall_dist is now: [%2.2f]", wall_dist);
     
 
     ros::spinOnce();
