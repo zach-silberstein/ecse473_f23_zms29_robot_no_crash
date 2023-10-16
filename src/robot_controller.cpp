@@ -19,19 +19,27 @@ void twistCallback(const geometry_msgs::Twist::ConstPtr& msg)
   geometry_msgs::Twist pt;
   pt.linear = msg->linear;
   pt.angular = msg->angular;
+  // If need to stop moving
   if(stop_moving){
     pt.linear.x = 0;
   }
-  p_pub->publish(msg);
+  // Pulish pt
+  p_pub->publish(pt);
 }
 
 void laserCallback(const sensor_msgs::LaserScan::ConstPtr& msg)
 {
-  for(int i = 45; i <=235; i++){
+  // 45 to 225 b/c that is the 180 degrees infront of robot
+  for(int i = 45; i <=225; i++){
+    // If within wall dist stop
     if(0.5 > msg->ranges[i]){
       stop_moving = true;
       ROS_WARN("Obstacle encountered, try turning");
       break;
+    }
+    // If made it to end of check then allow move
+    if(i==225){
+      stop_moving = false;
     }
   }
 }
