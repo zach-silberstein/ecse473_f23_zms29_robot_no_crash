@@ -16,4 +16,4 @@ Specifies the name space to be launced in
 > rqt_gui (boolean, default = "true")  
 If true, then the rqt_gui is launched  
 To control the robot using the gui:  
-Add a Robot Steering Plugin and change the topic to **"/des_vel"**
+Add a Robot Steering Plugin and change the topic to **"robot0/des_vel"**
