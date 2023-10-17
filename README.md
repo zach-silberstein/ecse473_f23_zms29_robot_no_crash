@@ -14,6 +14,6 @@ The launch file has the following args:
 Specifies the name space to be launced in  
   
 > rqt_gui (boolean, default = "true")  
-If true, then the rqt_gui is launched
+If true, then the rqt_gui is launched  
 To control the robot using the gui:  
 Add a Robot Steering Plugin and change the topic to **"/des_vel"**
