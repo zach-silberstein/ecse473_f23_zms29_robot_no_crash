@@ -10,4 +10,10 @@ The launch file has the following args:
 - robot_ns
 - rqt_gui
 
-> test of blockquote
+> robot_ns (string, default = "robot0")  
+Specifies the name space to be launced in  
+  
+> rqt_gui (boolean, default = "true")  
+If true, then the rqt_gui is launched
+To control the robot using the gui:  
+Add a Robot Steering Plugin and change the topic to **"/des_vel"**
